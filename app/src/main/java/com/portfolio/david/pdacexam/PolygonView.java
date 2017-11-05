@@ -92,6 +92,7 @@ public class PolygonView {
         }
         //The marker point is outside so let's compute shortest distance from it to polygon
         //based on distances of each from three it's sides https://www.enotes.com/homework-help/determine-length-height-triangle-abc-that-191277
+        //and law of cosines https://en.wikipedia.org/wiki/Law_of_cosines
         map.clear();
         displayOnMap(newPolygonCoordinates, Color.RED, 5);
         displayOnMap(polygonCoordinates, Color.BLACK, 10);
@@ -157,6 +158,13 @@ public class PolygonView {
     }
 
     private float getShortestDistance(float a, float b, float base) {
+        //if one of base angles is greater then 90 degrees then the shortest distance is one of sides a or b
+        double alpha = Math.toDegrees(Math.acos((base * base + a * a - b * b) / (2 * base * a)));
+        double betha = Math.toDegrees(Math.acos((base * base + b * b - a * a) / (2 * base * b)));
+        if (alpha > 90 || betha > 90) {
+            return Math.min(a, b);
+        }
+        //if not, the shortest distance is height of triangle
         float p = (a + b + base) / 2;
         return (float)(2 * (Math.sqrt(p * (p - a) * (p - b) * (p - base)) / base));
     }
